@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>اگرائی</title>
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #b6fcb6 0%, #7be87b 100%);
+            font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: #fff;
+            margin: 40px auto;
+            padding: 32px 28px 28px 28px;
+            border-radius: 24px;
+            width: 95%;
+            max-width: 900px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 {
+            color: #1976d2;
+            margin-bottom: 18px;
+            font-size: 2.1em;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .back-btn {
+            background: #ffb300;
+            color: #222;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 28px;
+            font-size: 1.1em;
+            margin-bottom: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .back-btn:hover {
+            background: #ffd54f;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            width: 100%;
+        }
+        .form-row > div {
+            flex: 1;
+            min-width: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #1976d2;
+            font-size: 1.05em;
+        }
+        input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1.5px solid #b6fcb6;
+            border-radius: 6px;
+            font-size: 1.05em;
+            background: #f8fff8;
+            transition: border 0.2s;
+        }
+        input:focus {
+            border-color: #1976d2;
+            outline: none;
+        }
+        .btns {
+            margin-bottom: 18px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            width: 100%;
+        }
+        .btns button {
+            font-size: 1.05em;
+            padding: 8px 22px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btns .save-btn { background: #43a047; color: #fff; }
+        .btns .save-btn:hover { background: #388e3c; }
+        .btns .update-btn { background: #1976d2; color: #fff; }
+        .btns .update-btn:hover { background: #0d47a1; }
+        .btns .refresh-btn { background: #2196f3; color: #fff; }
+        .btns .refresh-btn:hover { background: #1565c0; }
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+            background: #f8fff8;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #b6fcb6;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        th {
+            background: #1976d2;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        tbody tr:nth-child(even) {
+            background: #f1f8e9;
+        }
+        tbody tr:hover {
+            background: #e3f2fd;
+            transform: scale(1.01);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: #0d47a1;
+            cursor: pointer;
+        }
+        .clickable-name, .clickable-counter { color: #1976d2; cursor: pointer; text-decoration: underline; }
+        @media (max-width: 700px) {
+            .container { padding: 10px 2vw; }
+            .form-row { flex-direction: column; gap: 8px; }
+            .form-row > div { min-width: 0; }
+            th, td { font-size: 0.98em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="window.location.href='/'">واپس</button>
+        <h2>اگرائی</h2>
+        <form id="agrahiForm">
+            <div class="form-row">
+                <div><label>شمار کنندہ:</label><input type="number" id="counterInput"></div>
+                <div><label>گاہک کا نام:</label><input type="text" id="customerNameInput"></div>
+                <div><label>تاریخ:</label><input type="date" id="dateInput"></div>
+                <div><label>سابقہ:</label><input type="number" id="pichlaInput" value="0" readonly></div>
+                <div><label>نیا مال:</label><input type="number" id="newItemInput" value="0"></div>
+                <div><label>جمع:</label><input type="number" id="jamaInput" value="0"></div>
+                <div><label>بقایا:</label><input type="number" id="baqayaInput" value="0" readonly></div>
+            </div>
+            <div class="btns">
+                <button type="submit" class="save-btn">محفوظ کریں</button>
+                <button type="button" class="update-btn" id="updateBtn" style="display:none;">اپڈیٹ کریں</button>
+                <button type="button" class="refresh-btn" onclick="loadAgrahiFromAccounts()">Refresh</button>
+            </div>
+        </form>
+        <div class="table-wrap">
+            <table id="agrahiTable">
+                <thead>
+                    <tr>
+                        <th>شمار کنندہ</th>
+                        <th>گاہک کا نام</th>
+                        <th>تاریخ</th>
+                        <th>سابقہ</th>
+                        <th>نیا مال</th>
+                        <th>جمع</th>
+                        <th>بقایا</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data rows will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+    let selectedRowId = null;
+    let allRecords = [];
+
+    async function loadAgrahiFromAccounts(showMsg = false) {
+        try {
+            const response = await fetch('/api/accounts');
+            allRecords = await response.json();
+            filterAndDisplay();
+            if (showMsg) alert('📦 ڈیٹا لوڈ ہو گیا');
+        } catch (error) {
+            console.error('Error loading accounts:', error);
+            alert('❌ ڈیٹا لوڈ کرنے میں مسئلہ آیا');
+        }
+    }
+
+    // یہ فنکشن database (API) سے data لے کر HTML table (datatable) میں دکھاتا ہے
+    function filterAndDisplay() {
+        const name = document.getElementById('customerNameInput').value.trim();
+        const counter = document.getElementById('counterInput').value.trim();
+        const tbody = document.querySelector('#agrahiTable tbody');
+        tbody.innerHTML = '';
+        let filtered = allRecords;
+        if (counter) {
+            filtered = allRecords.filter(r => String(r.id) === counter);
+        } else if (name) {
+            filtered = allRecords.filter(r => r.account_name.includes(name));
+        }
+        // یہ حصہ ہر record کو table row میں ڈالے گا
+        filtered.forEach((record, idx) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="clickable-counter" data-id="${record.id}">${record.id}</td>
+                <td class="clickable-name" data-id="${record.id}">${record.account_name || ''}</td>
+                <td>${record.date || ''}</td>
+                <td>${record.remaining || 0}</td>
+                <td>${record.new_item || 0}</td>
+                <td>${record.jama || 0}</td>
+                <td>${record.total_amount || 0}</td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        // Add click event to names and counter
+        document.querySelectorAll('.clickable-name, .clickable-counter').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const rec = allRecords.find(r => r.id == this.dataset.id);
+                if (rec) {
+                    selectedRowId = rec.id;
+                    document.getElementById('counterInput').value = rec.id;
+                    document.getElementById('customerNameInput').value = rec.account_name;
+                    document.getElementById('pichlaInput').value = rec.remaining;
+                    document.getElementById('newItemInput').value = 0;
+                    document.getElementById('jamaInput').value = 0;
+                    // Set today's date
+                    const today = new Date();
+                    const yyyy = today.getFullYear();
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    document.getElementById('dateInput').value = `${yyyy}-${mm}-${dd}`;
+                    document.getElementById('baqayaInput').value = rec.remaining;
+                    document.getElementById('updateBtn').style.display = '';
+                }
+            });
+        });
+    }
+
+    // Filter table as user types customer name or counter
+    document.getElementById('customerNameInput').addEventListener('input', filterAndDisplay);
+    document.getElementById('counterInput').addEventListener('input', filterAndDisplay);
+
+    // Auto-calculate baqaya
+    ['newItemInput', 'jamaInput'].forEach(id => {
+        document.getElementById(id).addEventListener('input', function() {
+            const pichla = parseInt(document.getElementById('pichlaInput').value) || 0;
+            const newItem = parseInt(document.getElementById('newItemInput').value) || 0;
+            const jama = parseInt(document.getElementById('jamaInput').value) || 0;
+            document.getElementById('baqayaInput').value = pichla + newItem - jama;
+        });
+    });
+
+    // Save new record
+    document.getElementById('agrahiForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (selectedRowId) return; // Prevent save if updating
+        const record = {
+            account_name: document.getElementById('customerNameInput').value,
+            date: document.getElementById('dateInput').value,
+            pichla: parseInt(document.getElementById('pichlaInput').value) || 0,
+            new_item: parseInt(document.getElementById('newItemInput').value) || 0,
+            jama: parseInt(document.getElementById('jamaInput').value) || 0,
+            baqaya: parseInt(document.getElementById('baqayaInput').value) || 0
+        };
+        try {
+            await saveAgrahi(record);
+            this.reset();
+            // Set today's date
+            const today = new Date();
+            document.getElementById('dateInput').value = today.toISOString().split('T')[0];
+            // Reset other fields
+            document.getElementById('pichlaInput').value = '0';
+            document.getElementById('newItemInput').value = '0';
+            document.getElementById('jamaInput').value = '0';
+            document.getElementById('baqayaInput').value = '0';
+            selectedRowId = null;
+            document.getElementById('updateBtn').style.display = 'none';
+            await loadAgrahiFromAccounts(true);
+        } catch (error) {
+            console.error('Error saving agrahi:', error);
+            alert('❌ ڈیٹا محفوظ کرنے میں مسئلہ آیا');
+        }
+    });
+
+    // Update record in accounts table
+    async function updateAccount(record) {
+        try {
+            const response = await fetch(`/api/accounts/${record.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            });
+            const result = await response.json();
+            if (result.rows_updated > 0) {
+                alert('✅ آپ کا ڈیٹا کامیابی سے اپڈیٹ ہو گیا ہے');
+                // Reset form
+                document.getElementById('agrahiForm').reset();
+                // Set today's date
+                const today = new Date();
+                document.getElementById('dateInput').value = today.toISOString().split('T')[0];
+                // Reset other fields
+                document.getElementById('pichlaInput').value = '0';
+                document.getElementById('newItemInput').value = '0';
+                document.getElementById('jamaInput').value = '0';
+                document.getElementById('baqayaInput').value = '0';
+                selectedRowId = null;
+                document.getElementById('updateBtn').style.display = 'none';
+                await loadAgrahiFromAccounts(false);
+            } else {
+                alert('⚠️ کوئی تبدیلی نہیں ہوئی، ہو سکتا ہے ID نہ ملی ہو۔');
+            }
+        } catch (error) {
+            alert('❌ اپڈیٹ میں مسئلہ آیا: ' + error);
+            console.error('Error updating account:', error);
+        }
+    }
+
+    // Update button event
+    document.getElementById('updateBtn').addEventListener('click', async function () {
+        if (!selectedRowId) return;
+
+        const record = {
+            id: selectedRowId,
+            counter: document.getElementById('counterInput').value,
+            account_name: document.getElementById('customerNameInput').value,
+            date: document.getElementById('dateInput').value,
+            remaining: parseInt(document.getElementById('pichlaInput').value) || 0,
+            new_item: parseInt(document.getElementById('newItemInput').value) || 0,
+            jama: parseInt(document.getElementById('jamaInput').value) || 0,
+            total_amount: parseInt(document.getElementById('baqayaInput').value) || 0
+        };
+
+        const response = await fetch(`/api/accounts/${record.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(record)
+        });
+
+        if (response.ok) {
+            // Update the table row with new values
+            const updatedRow = document.querySelector(`td[data-id="${record.id}"]`).parentElement;
+            updatedRow.innerHTML = `
+                <td class="clickable-counter" data-id="${record.id}">${record.counter}</td>
+                <td class="clickable-name" data-id="${record.id}">${record.account_name}</td>
+                <td>${record.date}</td>
+                <td>${record.remaining}</td>
+                <td>${record.new_item}</td>
+                <td>${record.jama}</td>
+                <td>${record.total_amount}</td>
+            `;
+
+            // Reset form and hide update button
+            document.getElementById('agrahiForm').reset();
+            const today = new Date();
+            document.getElementById('dateInput').value = today.toISOString().split('T')[0];
+            document.getElementById('pichlaInput').value = '0';
+            document.getElementById('newItemInput').value = '0';
+            document.getElementById('jamaInput').value = '0';
+            document.getElementById('baqayaInput').value = '0';
+            selectedRowId = null;
+            document.getElementById('updateBtn').style.display = 'none';
+
+            // Reload all records
+            await loadAgrahiFromAccounts();
+        } else {
+            alert('اپڈیٹ کرنے میں مسئلہ پیش آ گیا!');
+        }
+    });
+
+    // Save new agrahi
+    async function saveAgrahi(record) {
+        try {
+            await fetch('/api/agrahi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            });
+        } catch (error) {
+            console.error('Error saving agrahi:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set today's date in dateInput
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        document.getElementById('dateInput').value = `${yyyy}-${mm}-${dd}`;
+        loadAgrahiFromAccounts();
+    });
+    </script>
+</body>
+</html>

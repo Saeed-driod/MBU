@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>پرنٹ - ملک بوٹا اینڈ برادرز سبزی منڈی اوکاڑہ</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+        body {
+            font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .date {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 4px 6px;
+            text-align: right;
+            white-space: nowrap;
+            word-break: break-all;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .print-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .print-btn:hover {
+            background-color: #45a049;
+        }
+        th.sabiqa, td.sabiqa {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        th, td {
+            width: 7%;
+        }
+        th[style], td[style] {
+            width: 2%;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="window.print()" class="print-btn no-print">پرنٹ کریں</button>
+    
+    <div class="header">
+        <h2>ملک بوٹا اینڈ برادرز سبزی منڈی اوکاڑہ</h2>
+    </div>
+    
+    <div class="date">
+        <p>تاریخ: {{ accounts[0].date if accounts else '' }}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>شمار کنندہ</th>
+                <th>نام</th>
+                <th class="sabiqa">سابقہ</th>
+                <th>نیا مال</th>
+                <th>جمع</th>
+                <th style="border-left:2px solid black;"></th>
+                <th>شمار کنندہ</th>
+                <th>نام</th>
+                <th class="sabiqa">سابقہ</th>
+                <th>نیا مال</th>
+                <th>جمع</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(0, accounts|length, 2) %}
+            <tr>
+                <td>{{ accounts[i].id }}</td>
+                <td>{{ accounts[i].account_name }}</td>
+                <td class="sabiqa">{{ accounts[i].remaining }}</td>
+                <td></td>
+                <td></td>
+                <td style="border-left:2px solid black;"></td>
+                {% if accounts|length > i+1 %}
+                    <td>{{ accounts[i+1].id }}</td>
+                    <td>{{ accounts[i+1].account_name }}</td>
+                    <td class="sabiqa">{{ accounts[i+1].remaining }}</td>
+                    <td></td>
+                    <td></td>
+                {% else %}
+                    <td></td><td></td><td></td><td></td><td></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            <!-- Summary Row -->
+            <tr>
+                <td colspan="2"><strong>اگرائی</strong></td>
+                <td class="sabiqa"><strong>{{ accounts | sum(attribute='remaining') }}</strong></td>
+                <td></td>
+                <td></td>
+                <td style="border-left:2px solid black;"></td>
+                <td colspan="2"><strong>اگرائی</strong></td>
+                <td class="sabiqa"><strong></strong></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

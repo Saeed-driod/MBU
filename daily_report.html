@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>روزانہ مالی رپورٹ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            padding: 32px 20px 24px 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #222;
+        }
+        .filter-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .filter-row label {
+            font-size: 1.1em;
+        }
+        .filter-row input[type="date"] {
+            padding: 6px 10px;
+            border-radius: 5px;
+            border: 1px solid #bdbdbd;
+            font-size: 1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f9f9f9;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        th {
+            background: #e3f2fd;
+            color: #222;
+        }
+        tr:nth-child(even) {
+            background: #f1f8e9;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 10px; }
+            th, td { font-size: 0.95em; padding: 7px 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>روزانہ مالی رپورٹ</h1>
+        <div class="filter-row">
+            <label for="dateFilter">تاریخ منتخب کریں:</label>
+            <input type="date" id="dateFilter">
+            <button onclick="clearFilter()">تمام</button>
+        </div>
+        <table id="reportTable">
+            <thead>
+                <tr>
+                    <th>تاریخ</th>
+                    <th>سابقہ رقم</th>
+                    <th>آج جمع شدہ رقم</th>
+                    <th>نیا مال</th>
+                    <th>بقایا رقم</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        let allReports = [];
+        async function loadReport() {
+            const res = await fetch('/api/daily-report');
+            allReports = await res.json();
+            displayReport();
+        }
+        function displayReport() {
+            const tbody = document.querySelector('#reportTable tbody');
+            tbody.innerHTML = '';
+            const filterDate = document.getElementById('dateFilter').value;
+            let filtered = allReports;
+            if (filterDate) {
+                filtered = allReports.filter(r => r.date === filterDate);
+            }
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">کوئی ریکارڈ نہیں ملا</td></tr>';
+                return;
+            }
+            filtered.forEach(r => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${r.date}</td>
+                    <td>${r.total_sabiqa ?? 0}</td>
+                    <td>${r.total_jama ?? 0}</td>
+                    <td>${r.total_newitem ?? 0}</td>
+                    <td>${r.total_baqaya ?? 0}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        function clearFilter() {
+            document.getElementById('dateFilter').value = '';
+            displayReport();
+        }
+        document.getElementById('dateFilter').addEventListener('change', displayReport);
+        window.onload = loadReport;
+    </script>
+</body>
+</html> 

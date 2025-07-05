@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لاگ اِن</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { background: #f0f0f0; font-family: 'Noto Nastaliq Urdu', Arial, sans-serif; }
+        .login-box {
+            max-width: 350px;
+            margin: 80px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            padding: 32px 24px 24px 24px;
+        }
+        h2 { text-align: center; color: #1976D2; margin-bottom: 24px; }
+        label { display: block; margin-bottom: 6px; font-size: 1.1em; }
+        input[type="text"], input[type="password"] {
+            width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #bdbdbd; margin-bottom: 16px; font-size: 1em;
+        }
+        button { width: 100%; padding: 10px; background: #1976D2; color: #fff; border: none; border-radius: 6px; font-size: 1.1em; cursor: pointer; }
+        button:hover { background: #125ea2; }
+        .msg { color: #d32f2f; text-align: center; margin-bottom: 10px; }
+        .change-link { display: block; text-align: center; margin-top: 16px; color: #1976D2; text-decoration: none; }
+        .change-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>لاگ اِن کریں</h2>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="msg">{{ messages[0] }}</div>
+          {% endif %}
+        {% endwith %}
+        <form method="post">
+            <label>یوزر آئی ڈی:</label>
+            <input type="text" name="username" required autofocus>
+            <label>پاسورڈ:</label>
+            <input type="password" name="password" required>
+            <button type="submit">لاگ اِن</button>
+        </form>
+        <a href="/change-password" class="change-link">پاسورڈ تبدیل کریں</a>
+    </div>
+</body>
+</html> 
